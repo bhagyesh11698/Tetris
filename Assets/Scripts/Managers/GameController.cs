@@ -8,6 +8,13 @@ public class GameController : MonoBehaviour
     Board m_gameBoard;
     Spawner m_spawner;
 
+    // currently active shape
+    Shape m_activeShape;
+
+    float m_dropInterval = 1f;
+
+    float m_timeToDrop;
+
     private void Start()
     {
         //Method 1
@@ -32,7 +39,38 @@ public class GameController : MonoBehaviour
 
         if (m_spawner)
         {
+            if (m_activeShape == null)
+            {
+                m_activeShape = m_spawner.SpawnShape();
+            }
             m_spawner.transform.position = Vectorf.Round(m_spawner.transform.position);
+        }
+    }
+
+    private void Update()
+    {
+        if (!m_gameBoard || !m_spawner)
+        {
+            return;
+        }
+
+        if (Time.time > m_timeToDrop)
+        {
+            m_timeToDrop = Time.time + m_dropInterval;
+            if (m_activeShape)
+            {
+                m_activeShape.MoveDown();
+
+                if (!m_gameBoard.IsValidPosition(m_activeShape))
+                {
+                    m_activeShape.MoveUp();
+
+                    if (m_spawner)
+                    {
+                        m_activeShape = m_spawner.SpawnShape();
+                    }
+                }
+            }
         }
     }
 

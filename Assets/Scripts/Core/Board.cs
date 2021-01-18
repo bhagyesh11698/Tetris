@@ -17,12 +17,30 @@ public class Board : MonoBehaviour
     private void Awake()
     {
         m_grid = new Transform[m_width, m_height];
-
     }
 
     private void Start()
     {
         DrawEmptyCells();
+    }
+
+    // Boundary Check - will not check upper boundary of board
+    bool IsWithinBoard(int x, int y)
+    {
+        return (x >= 0 && x < m_width && y >= 0);
+    }
+
+    public bool IsValidPosition(Shape shape)
+    {
+        foreach (Transform child in shape.transform)
+        {
+            Vector2 pos = Vectorf.Round(child.position);
+            if (!IsWithinBoard((int)pos.x, (int)pos.y))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     void DrawEmptyCells()
