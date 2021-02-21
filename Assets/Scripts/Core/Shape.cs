@@ -1,60 +1,66 @@
 ﻿using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
-
 
 public class Shape : MonoBehaviour
 {
-    public bool m_canRotate;
 
-    #region Move
-    private void Move(Vector3 moveDirection)
-    {
-        transform.position += moveDirection;
-    }
+	// turn this property off if you don't want the shape to rotate (Shape O)
+	public bool m_canRotate = true;
 
-    public void MoveLeft()
-    {
-        Move(new Vector3(-1, 0, 0));
-    }
-    public void MoveRight()
-    {
-        Move(new Vector3(1, 0, 0));
+	// small offset to shift position while in queue
+	public Vector3 m_queueOffset;
 
-    }
-    public void MoveDown()
-    {
-        Move(new Vector3(0, -1, 0));
+	// general move method
+	void Move(Vector3 moveDirection)
+	{
+		transform.position += moveDirection;
+	}
 
-    }
-    public void MoveUp()
-    {
-        Move(new Vector3(0, 1, 0));
 
-    }
-    #endregion Move
+	//public methods for moving left, right, up and down, respectively
+	public void MoveLeft()
+	{
+		Move(new Vector3(-1, 0, 0));
+	}
 
-    #region Rotate
-    public void RotateRight()
-    {
-        if (m_canRotate)
-        {
-            transform.Rotate(0, 0, -90);
-        }
-    }
+	public void MoveRight()
+	{
+		Move(new Vector3(1, 0, 0));
+	}
 
-    public void RotateLeft()
-    {
-        if (m_canRotate)
-        {
-            transform.Rotate(0, 0, 90);
-        }
-    }
-    #endregion Rotate
+	public void MoveUp()
+	{
+		Move(new Vector3(0, 1, 0));
+	}
 
-    private void Start()
-    {
-        //InvokeRepeating("MoveDown", 0, 0.5f); // Moves down after every 0.5 seconds
-        //InvokeRepeating("RotateLeft", 0, 2f); // Moves down after every 2 seconds
-    }
+	public void MoveDown()
+	{
+		Move(new Vector3(0, -1, 0));
+	}
+
+
+	//public methods for rotating right and left
+	public void RotateRight()
+	{
+		if (m_canRotate)
+			transform.Rotate(0, 0, -90);
+	}
+	public void RotateLeft()
+	{
+		if (m_canRotate)
+			transform.Rotate(0, 0, 90);
+	}
+
+	public void RotateClockwise(bool clockwise)
+	{
+		if (clockwise)
+		{
+			RotateRight();
+		}
+		else
+		{
+			RotateLeft();
+		}
+	}
+
 }
